@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.5.2"
+  },
+  "name": "employeemanagementtracker",
+  "description": "Manage a company's employee database, using Node.js, Inquirer, and MySQL.",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Terence-A/EmployeeManagementTracker.git"
+  },
+  "author": "Terence Arseneault",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Terence-A/EmployeeManagementTracker/issues"
+  },
+  "homepage": "https://github.com/Terence-A/EmployeeManagementTracker#readme"
+}
