@@ -1,13 +1,16 @@
+// get node mudules, dependencies and packages
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const cfonts = require("cfonts");
 
+// heading, ascii cfonts for styling header
 cfonts.say(
   `
------------------
-|    Employee   |
-|    Manager    |
------------------`,
+ -------------
+  Employee
+  Manager
+ -------------
+`,
   {
     font: "tiny",
     lineHeight: 1,
@@ -15,6 +18,7 @@ cfonts.say(
   }
 );
 
+// Main questions
 const mainQuestions = [
   {
     type: "list",
@@ -32,5 +36,11 @@ const mainQuestions = [
 ];
 
 inquirer.prompt(mainQuestions).then((answer) => {
-  console.log(answer.options);
+  if (answer.options === "View all departments") {
+    departments();
+  }
 });
+
+departments = () => {
+  console.log(departments);
+};
