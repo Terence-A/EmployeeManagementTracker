@@ -3,6 +3,12 @@ const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const cfonts = require("cfonts");
 
+const db = mysql.createConnection({
+  hose: "localhost",
+  user: "root",
+  passowrd: "password",
+});
+
 // heading, ascii cfonts for styling header
 cfonts.say(
   `
