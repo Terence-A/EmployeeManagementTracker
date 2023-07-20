@@ -4,9 +4,10 @@ const mysql = require("mysql2");
 const cfonts = require("cfonts");
 
 const db = mysql.createConnection({
-  hose: "localhost",
+  host: "localhost",
   user: "root",
-  passowrd: "password",
+  password: "password",
+  //   database: "employeeTracker_db",
 });
 
 // heading, ascii cfonts for styling header
@@ -25,28 +26,39 @@ cfonts.say(
 );
 
 // Main questions
-const mainQuestions = [
-  {
-    type: "list",
-    name: "options",
-    message: "Choose an option:",
-    choices: [
-      "View all departments",
-      "View all roles",
-      "View all employees",
-      "Add a department",
-      "Add and employee",
-      "Update an employee role",
-    ],
-  },
-];
+Options = () => {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "options",
+        message: "Choose an option:",
+        choices: [
+          "View all departments",
+          "View all roles",
+          "View all employees",
+          "Add a department",
+          "Add an employee",
+          "Update an employee role",
+          "Exit",
+        ],
+      },
+    ])
 
-inquirer.prompt(mainQuestions).then((answer) => {
-  if (answer.options === "View all departments") {
-    departments();
-  }
-});
-
-departments = () => {
-  console.log(departments);
+    .then((answer) => {
+      console.log("answer");
+      //   if (answer.options === "View all departments") {
+      //     departments();
+      //   }
+    });
 };
+
+// departments = () => {
+//   console.log(departments);
+// };
+
+// roles = () => {
+//   console.log(roles);
+// };
+
+Options();
