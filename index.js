@@ -4,6 +4,7 @@ const mysql = require("mysql2");
 const cfonts = require("cfonts");
 const db = require("./utilities/dbConnection.js");
 const showLogo = require("./utilities/logo.js");
+const opt = require("./utilities/promptOptions.js");
 
 // heading, ascii cfonts for styling header
 
@@ -43,61 +44,15 @@ Options = () => {
     .then((answer) => {
       console.log("answer");
       if (answer.options === "View all departments") {
-        departments();
+        opt.departments();
       } else if (answer.options === "View all roles") {
-        roles();
+        opt.roles();
       } else if (answer.options === "View all employees") {
-        employees();
+        opt.employees();
       } else if (answer.options === "Clear screen") {
-        clear();
+        opt.clear();
       }
     });
-};
-
-departments = async () => {
-  db.query(
-    "select * from department",
-    await function (err, results) {
-      let result = console.table(results);
-      return Options();
-    }
-  );
-};
-
-roles = async () => {
-  db.query(
-    "select * from role",
-    await function (err, results) {
-      let result = console.table(results);
-      return Options();
-    }
-  );
-};
-employees = async () => {
-  db.query(
-    "select * from employee",
-    await function (err, results) {
-      let result = console.table(results);
-      return Options();
-    }
-  );
-};
-clear = async () => {
-  await process.stdout.write("\u001b[2J\u001b[0;0H");
-  cfonts.say(
-    `
-     -------------
-      Employee
-      Manager
-     -------------
-    `,
-    {
-      font: "tiny",
-      lineHeight: 1,
-      space: false,
-    }
-  );
-  Options();
 };
 
 Options();
