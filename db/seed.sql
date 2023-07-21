@@ -1,20 +1,24 @@
+-- use the database
 USE employeeTracker_db;
+
+
+-- insert data for DATABASE
 
 INSERT INTO department(name)
 VALUE   ("Sales"),
         ("Engineering"),
         ("Finance"),
-        ("Legal")
+        ("Legal");
 
 INSERT INTO role(title, salary, department_id)
-VALUE   ("Sales Lead"),
-        ("Salesperson"),
-        ("Lead Engineer"),
-        ("Software Engineer"),
-        ("Account Manager"),
-        ("Accountant"),
-        ("Legal Team Lead"),
-        ("Lawer")
+VALUE   ("Sales Lead",100000,1),
+        ("Salesperson",80000,1),
+        ("Lead Engineer",150000,2),
+        ("Software Engineer",120000,2),
+        ("Account Manager",160000,3),
+        ("Accountant", 125000,3),
+        ("Legal Team Lead",250000,4),
+        ("Lawer",190000,4);
 
 INSERT INTO  employee(first_name, last_name, role_id, manager_id)
 VALUE   ("John", "Doe", 1, null),
