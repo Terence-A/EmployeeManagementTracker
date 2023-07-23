@@ -26,10 +26,6 @@ roles = () => {
     JOIN department ON role.department_id = department.id`,
     function (err, results) {
       err ? console.log(err) : console.table(results), Options();
-      //   let result = console.table(results);
-      //   console.log(`
-      //   `);
-      //   return Options();
     }
   );
 };
@@ -58,4 +54,12 @@ clear = () => {
   Options();
 };
 
-module.exports = { departments, roles, employees, clear };
+module.exports = {
+  departments,
+  roles,
+  employees,
+  addDepartment,
+  addEmployee,
+  updateEmployeeRole,
+  clear,
+};

@@ -2,10 +2,10 @@ const cfonts = require("cfonts");
 showLogo = () => {
   cfonts.say(
     `
-     -------------
-      Employee
-      Manager
-     -------------
+  -------------
+   Employee
+   Manager
+  -------------
     `,
     {
       font: "tiny",

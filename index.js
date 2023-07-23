@@ -49,9 +49,14 @@ Options = () => {
         opt.roles();
       } else if (answer.options === "View all employees") {
         opt.employees();
-      } else if (answer.options === "Clear screen") {
+      }else if (answer.options === "Add a department"){
+        opt.addDepartment();
+      }else if (answer.options === "Add an employee"){
+        opt.addEmployee();
+      }else if (answer.options === "Update an employee role"){
+        opt.updateEmployeeRole();
+      }else if (answer.options === "Clear screen") {
         opt.clear();
-      }
     });
 };
 
