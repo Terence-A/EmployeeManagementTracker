@@ -1,5 +1,6 @@
 const db = require("./dbConnection.js");
 const util = require("util");
+const inquirer = require("inquirer");
 
 departments = () => {
   process.stdout.write("\u001b[2J\u001b[0;0H");
@@ -47,6 +48,10 @@ employees = () => {
       err ? console.log(err) : console.table(results), Options();
     }
   );
+};
+
+addDepartment = () => {
+  db.query(`SELECT`);
 };
 clear = () => {
   process.stdout.write("\u001b[2J\u001b[0;0H");
