@@ -2,9 +2,9 @@ const db = require("./dbConnection.js");
 const util = require("util");
 const inquirer = require("inquirer");
 
+// ********************************** View All Departments ***************************************
 departments = () => {
-  process.stdout.write("\u001b[2J\u001b[0;0H");
-  showLogo();
+  clear();
   db.query("select id, name from department", function (err, results) {
     err ? console.log(err) : console.table(results), Options();
     //   let result = console.table(results);
@@ -14,9 +14,9 @@ departments = () => {
   });
 };
 
+// ********************************** View all Roles ***********************************************
 roles = () => {
-  process.stdout.write("\u001b[2J\u001b[0;0H");
-  showLogo();
+  clear();
   db.query(
     `SELECT 
         role.id,
@@ -30,7 +30,10 @@ roles = () => {
     }
   );
 };
+
+// ************************************* View All Employees ******************************************
 employees = () => {
+  clear();
   db.query(
     `SELECT 
         employee.id,
@@ -50,21 +53,124 @@ employees = () => {
   );
 };
 
+// **************************** ADD Department ***********************************
 addDepartment = () => {
-  db.query(`SELECT`);
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "addDept",
+        message: "Department name: ",
+        validate: (addDept) => {
+          if (!addDept) {
+            console.log("Please enter a department!");
+            return false;
+          } else {
+            return true;
+          }
+        },
+      },
+    ])
+    .then((answer) => {
+      db.query(
+        `
+        ALTER TABLE department auto_increment = 1; 
+        INSERT INTO department (name) 
+        VALUE ('${answer.addDept}')
+        `,
+        function (err, results) {
+          err
+            ? console.log(err)
+            : console.log(`You have added ${answer.addDept} to departments`),
+            Options();
+        }
+      );
+    });
 };
+
+// ********************************** Add Role ***************************************
+addRole = () => {
+  const getDepartments = [];
+  db.query("SELECT id,name FROM department", (err, res) => {
+    if (err) throw err;
+    for (let i = 0; i < res.length; i++) {
+      getDepartments.push(res[i]);
+    }
+    console.log(getDepartments);
+  });
+
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "Enter title of new role: ",
+        validate: (title) => {
+          if (!title) {
+            console.log("Please enter title for new role: ");
+            return false;
+          } else {
+            return true;
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "Enter salary: ",
+        validate: (salary) => {
+          if (!salary || NaN) {
+            console.log("Please enter a salary amount: ");
+            return false;
+          } else {
+            return true;
+          }
+        },
+      },
+      {
+        type: "list",
+        name: "pickDept",
+        message: "Choose a department",
+        choices: getDepartments,
+      },
+    ])
+    .then((answer) => {
+      let title = answer.title;
+      let salary = answer.salary;
+      let newId = answer.pickDept;
+      for (let i = 0; i < getDepartments.length; i++) {
+        if (newId === getDepartments[i].name) {
+          newId = getDepartments[i].id;
+        }
+      }
+
+      db.query(
+        `
+        INSERT INTO role(title, salary, department_id)
+        VALUE ("${title}", "${salary}",${newId})
+        `,
+        function (err, results) {
+          err
+            ? console.log(err)
+            : console.log(`You have added ${title} to roles`),
+            Options();
+        }
+      );
+    });
+};
+
+// ************************** Clear command line screen and show logo and run *********************
 clear = () => {
   process.stdout.write("\u001b[2J\u001b[0;0H");
   showLogo();
-  Options();
 };
 
 module.exports = {
   departments,
   roles,
+  addRole,
   employees,
   addDepartment,
-  addEmployee,
-  updateEmployeeRole,
-  clear,
+  // addEmployee,
+  // updateEmployeeRole,
 };

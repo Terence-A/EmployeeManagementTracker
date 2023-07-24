@@ -30,12 +30,12 @@ Options = () => {
         message: "Choose an option:",
         choices: [
           "View all departments",
-          "View all roles",
-          "View all employees",
           "Add a department",
+          "View all roles",
+          "Add role",
+          "View all employees",
           "Add an employee",
           "Update an employee role",
-          "Clear screen",
           "Exit",
         ],
       },
@@ -45,19 +45,22 @@ Options = () => {
       console.log("answer");
       if (answer.options === "View all departments") {
         opt.departments();
-      } else if (answer.options === "View all roles") {
-        opt.roles();
-      } else if (answer.options === "View all employees") {
-        opt.employees();
       } else if (answer.options === "Add a department") {
         opt.addDepartment();
-      } else if (answer.options === "Add an employee") {
-        opt.addEmployee();
-      } else if (answer.options === "Update an employee role") {
-        opt.updateEmployeeRole();
-      } else if (answer.options === "Clear screen") {
-        opt.clear();
+      } else if (answer.options === "View all roles") {
+        opt.roles();
+      } else if (answer.options === "Add role") {
+        opt.addRole();
+      } else if (answer.options === "View all employees") {
+        opt.employees();
       }
+      // else if (answer.options === "Add an employee") {
+      //   opt.addEmployee();
+      // } else if (answer.options === "Update an employee role") {
+      //   opt.updateEmployeeRole();
+      // } else if (answer.options === "Clear screen") {
+      //   opt.clear();
+      // }
     });
 };
 
