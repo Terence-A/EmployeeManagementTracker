@@ -258,7 +258,7 @@ addEmployee = () => {
 };
 
 // ****************************** Update Employee Role **************************
-updateEmployeeRole = async () => {
+updateEmployeeRole = () => {
   // variable and array for employees
 
   const getEmployees = [];
@@ -269,43 +269,46 @@ updateEmployeeRole = async () => {
       getEmployees.push(`${res[i].first_name} ${res[i].last_name}`);
     }
     // console.log(getEmployees);
-  });
+    const roles = [];
 
-  // variable and array for roles
-  const roles = [];
+    db.query("SELECT title from role", (err, res) => {
+      if (err) throw err;
+      for (let i = 0; i < res.length; i++) {
+        roles.push(res[i].title);
+      }
+      // console.log(roles);
+      // variable and array for roles
 
-  db.query("SELECT title from role", (err, res) => {
-    if (err) throw err;
-    for (let i = 0; i < res.length; i++) {
-      roles.push(res[i].title);
-    }
-    // console.log(roles);
-  });
-
-  // questions
-  inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "employeeName",
-        choices: getEmployees,
-      },
-      {
-        type: "list",
-        name: "newRole",
-        message: "Select a new Role: ",
-        choices: roles,
-      },
-    ])
-    .then((answer) => {
-      console.log("worked");
-      //     db.query(
-      //       `
-      // // UPDATE employee
-      // // SET an
-      // `
-      //     );
+      // questions
+      inquirer
+        .prompt([
+          // {
+          //   type: "input",
+          //   name: "test",
+          // },
+          {
+            type: "list",
+            name: "employeeName",
+            choices: getEmployees,
+          },
+          {
+            type: "list",
+            name: "newRole",
+            message: "Select a new Role: ",
+            choices: roles,
+          },
+        ])
+        .then((answer) => {
+          console.log("worked");
+          //     db.query(
+          //       `
+          // // UPDATE employee
+          // // SET an
+          // `
+          //     );
+        });
     });
+  });
 };
 
 // ***************** Clear command line screen and show logo and run *********************
