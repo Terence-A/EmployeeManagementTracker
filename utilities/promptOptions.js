@@ -14,7 +14,7 @@ departments = () => {
   });
 };
 
-// ********************************** View all Roles ***********************************************
+// ************************************ View all Roles ***********************************************
 roles = () => {
   clear();
   db.query(
@@ -53,7 +53,7 @@ employees = () => {
   );
 };
 
-// **************************** ADD Department ***********************************
+// ******************************** ADD Department ***********************************
 addDepartment = () => {
   inquirer
     .prompt([
@@ -74,7 +74,6 @@ addDepartment = () => {
     .then((answer) => {
       db.query(
         `
-        ALTER TABLE department auto_increment = 1; 
         INSERT INTO department (name) 
         VALUE ('${answer.addDept}')
         `,
@@ -88,7 +87,7 @@ addDepartment = () => {
     });
 };
 
-// ********************************** Add Role ***************************************
+// ************************************ Add Role ***************************************
 addRole = () => {
   const getDepartments = [];
   db.query("SELECT id,name FROM department", (err, res) => {
@@ -119,7 +118,7 @@ addRole = () => {
         name: "salary",
         message: "Enter salary: ",
         validate: (salary) => {
-          if (!salary || NaN) {
+          if (!salary) {
             console.log("Please enter a salary amount: ");
             return false;
           } else {
@@ -159,18 +158,106 @@ addRole = () => {
     });
 };
 
-// ************************** Clear command line screen and show logo and run *********************
+// ************************************* Add Employee ***********************************
+addEmployee = () => {
+  // create arrays for roles and managers
+  const getRole = [];
+  db.query("SELECT id,title from role", (err, res) => {
+    if (err) throw err;
+    for (let i = 0; i < res.length; i++) {
+      getRole.push(res[i]);
+    }
+    console.log(getRole);
+  });
+
+  const getManager = [];
+  db.query("SELECT id,first_name, last_name FROM employee", (err, res) => {
+    if (err) throw err;
+    for (let i = 0; i < res.length; i++) {
+      getManager.push(`${res[i].first_name} ${res[i].last_name}`);
+    }
+
+    console.log(getManager);
+  });
+
+  // Questions
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "Enter First Name: ",
+        validate: (firstName) => {
+          if (!firstName) {
+            console.log("Please enter first name! ");
+            return false;
+          } else {
+            return true;
+          }
+        },
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "Enter Last Name: ",
+        validate: (lastName) => {
+          if (!lastName) {
+            console.log("Please enter last name!");
+            return false;
+          } else {
+            return true;
+          }
+        },
+      },
+      {
+        type: "list",
+        name: "role",
+        message: "Enter Role: ",
+        choices: getRole,
+      },
+      {
+        type: "list",
+        name: "manager",
+        message: "Choose a manager",
+        choices: getManager,
+      },
+    ])
+    .then((answer) => {
+      for (let i = 0; i < getRole.length; i++) {
+        if (answer.role === getRole[i].title) {
+          answer.role = getRole[i].id;
+        }
+      }
+      db.query(
+        `
+      INSERT INTO employee(first_name, last_name, role_id, manager_id)
+      VALUE ("${answer.firstName}", "${answer.lastName}",${answer.role},1)
+      `,
+        function (err, results) {
+          err
+            ? console.log(err)
+            : console.log(
+                `You have added ${answer.firstName} ${answer.lastName} to employees`
+              ),
+            Options();
+        }
+      );
+    });
+};
+
+// ***************** Clear command line screen and show logo and run *********************
 clear = () => {
   process.stdout.write("\u001b[2J\u001b[0;0H");
   showLogo();
 };
 
+// ***************************************** exports **************************************
 module.exports = {
   departments,
   roles,
   addRole,
   employees,
   addDepartment,
-  // addEmployee,
+  addEmployee,
   // updateEmployeeRole,
 };
