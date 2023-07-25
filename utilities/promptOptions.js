@@ -95,7 +95,6 @@ addRole = () => {
     for (let i = 0; i < res.length; i++) {
       getDepartments.push(res[i]);
     }
-    console.log(getDepartments);
   });
 
   inquirer
@@ -169,8 +168,6 @@ addEmployee = () => {
       getRole.push(res[i]);
       getTitle.push(res[i].title);
     }
-    console.log(getRole);
-    console.log(getTitle);
   });
 
   const getManager = [];
@@ -181,9 +178,6 @@ addEmployee = () => {
       getManager.push(`${res[i].first_name} ${res[i].last_name}`);
       getManageId.push(res[i]);
     }
-
-    console.log(getManager);
-    console.log(getManageId);
   });
 
   // Questions
@@ -262,30 +256,30 @@ updateEmployeeRole = () => {
   // variable and array for employees
 
   const getEmployees = [];
+  const employeeId = [];
 
-  db.query("SELECT first_name, last_name FROM employee", (err, res) => {
+  db.query("SELECT id,first_name, last_name FROM employee", (err, res) => {
     if (err) throw err;
     for (let i = 0; i < res.length; i++) {
       getEmployees.push(`${res[i].first_name} ${res[i].last_name}`);
+      employeeId.push(res[i]);
     }
     // console.log(getEmployees);
     const roles = [];
+    const roleId = [];
 
-    db.query("SELECT title from role", (err, res) => {
+    db.query("SELECT id,title from role", (err, res) => {
       if (err) throw err;
       for (let i = 0; i < res.length; i++) {
         roles.push(res[i].title);
+        roleId.push(res[i]);
       }
       // console.log(roles);
-      // variable and array for roles
 
+      // variable and array for roles
       // questions
       inquirer
         .prompt([
-          // {
-          //   type: "input",
-          //   name: "test",
-          // },
           {
             type: "list",
             name: "employeeName",
@@ -299,13 +293,30 @@ updateEmployeeRole = () => {
           },
         ])
         .then((answer) => {
-          console.log("worked");
-          //     db.query(
-          //       `
-          // // UPDATE employee
-          // // SET an
-          // `
-          //     );
+          for (let i = 0; i < getEmployees.length; i++) {
+            if (answer.employeeName === getEmployees[i]) {
+              answer.employeeName = employeeId[i].id;
+            }
+          }
+
+          for (let i = 0; i < roleId.length; i++) {
+            if (answer.newRole === roles[i]) {
+              answer.newRole = roleId[i].id;
+            }
+          }
+          db.query(
+            `
+            UPDATE employee
+            SET role_id = ${answer.newRole}
+            WHERE id = ${answer.employeeName}
+            `,
+            function (err, results) {
+              err
+                ? console.log(err)
+                : console.log(`You have updated Employee Role `),
+                Options();
+            }
+          );
         });
     });
   });
