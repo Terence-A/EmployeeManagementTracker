@@ -162,22 +162,28 @@ addRole = () => {
 addEmployee = () => {
   // create arrays for roles and managers
   const getRole = [];
+  const getTitle = [];
   db.query("SELECT id,title from role", (err, res) => {
     if (err) throw err;
     for (let i = 0; i < res.length; i++) {
       getRole.push(res[i]);
+      getTitle.push(res[i].title);
     }
     console.log(getRole);
+    console.log(getTitle);
   });
 
   const getManager = [];
+  const getManageId = [];
   db.query("SELECT id,first_name, last_name FROM employee", (err, res) => {
     if (err) throw err;
     for (let i = 0; i < res.length; i++) {
       getManager.push(`${res[i].first_name} ${res[i].last_name}`);
+      getManageId.push(res[i]);
     }
 
     console.log(getManager);
+    console.log(getManageId);
   });
 
   // Questions
@@ -213,7 +219,7 @@ addEmployee = () => {
         type: "list",
         name: "role",
         message: "Enter Role: ",
-        choices: getRole,
+        choices: getTitle,
       },
       {
         type: "list",
@@ -223,15 +229,21 @@ addEmployee = () => {
       },
     ])
     .then((answer) => {
+      let role = "";
       for (let i = 0; i < getRole.length; i++) {
         if (answer.role === getRole[i].title) {
-          answer.role = getRole[i].id;
+          role = getRole[i].id;
+        }
+      }
+      for (let i = 0; i < getManager.length; i++) {
+        if (answer.manager === getManager[i]) {
+          answer.manager = getManageId[i].id;
         }
       }
       db.query(
         `
       INSERT INTO employee(first_name, last_name, role_id, manager_id)
-      VALUE ("${answer.firstName}", "${answer.lastName}",${answer.role},1)
+      VALUE ("${answer.firstName}", "${answer.lastName}",${role},${answer.manager})
       `,
         function (err, results) {
           err
@@ -242,6 +254,57 @@ addEmployee = () => {
             Options();
         }
       );
+    });
+};
+
+// ****************************** Update Employee Role **************************
+updateEmployeeRole = async () => {
+  // variable and array for employees
+
+  const getEmployees = [];
+
+  db.query("SELECT first_name, last_name FROM employee", (err, res) => {
+    if (err) throw err;
+    for (let i = 0; i < res.length; i++) {
+      getEmployees.push(`${res[i].first_name} ${res[i].last_name}`);
+    }
+    // console.log(getEmployees);
+  });
+
+  // variable and array for roles
+  const roles = [];
+
+  db.query("SELECT title from role", (err, res) => {
+    if (err) throw err;
+    for (let i = 0; i < res.length; i++) {
+      roles.push(res[i].title);
+    }
+    // console.log(roles);
+  });
+
+  // questions
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "employeeName",
+        choices: getEmployees,
+      },
+      {
+        type: "list",
+        name: "newRole",
+        message: "Select a new Role: ",
+        choices: roles,
+      },
+    ])
+    .then((answer) => {
+      console.log("worked");
+      //     db.query(
+      //       `
+      // // UPDATE employee
+      // // SET an
+      // `
+      //     );
     });
 };
 
@@ -259,5 +322,5 @@ module.exports = {
   employees,
   addDepartment,
   addEmployee,
-  // updateEmployeeRole,
+  updateEmployeeRole,
 };
