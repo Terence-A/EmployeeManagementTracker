@@ -57,6 +57,8 @@ Options = () => {
         opt.addEmployee();
       } else if (answer.options === "Update an employee role") {
         opt.updateEmployeeRole();
+      } else if (answer.options === "Exit") {
+        process.exit();
       }
     });
 };
