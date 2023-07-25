@@ -337,4 +337,5 @@ module.exports = {
   addDepartment,
   addEmployee,
   updateEmployeeRole,
+  clear,
 };

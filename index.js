@@ -8,7 +8,7 @@ const opt = require("./utilities/promptOptions.js");
 
 // heading, ascii cfonts for styling header
 
-showLogo();
+clear();
 
 // Main questions
 Options = () => {
